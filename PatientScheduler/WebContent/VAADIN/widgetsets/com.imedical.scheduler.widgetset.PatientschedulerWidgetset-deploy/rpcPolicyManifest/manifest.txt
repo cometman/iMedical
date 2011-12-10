@@ -1,0 +1,2 @@
+# Module com.imedical.scheduler.widgetset.PatientschedulerWidgetset
+# RPC service class, partial path of RPC policy file
