@@ -13,8 +13,16 @@ public class DataTestSets {
 	public DataTestSets() {
 		bob.setFirstName("Bob");
 		bob.setLastName("Boya");
+		bob.setPhoneNumber("325.668.1534");
+		bob.setAge("42");
+		bob.setMiddleName("Rob");
+		bob.setPaymentType("Cash");
 		clay.setFirstName("Clay");
 		clay.setLastName("Selby");
+		clay.setPhoneNumber("325.338.1264");
+		clay.setAge("21");
+		clay.setMiddleName("Robert");
+		clay.setPaymentType("Credit");
 
 		patients.add(bob);
 		patients.add(clay);
