@@ -3,6 +3,8 @@ package com.imedical.scheduler.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.imedical.scheduler.data.IPatientDAO;
+import com.imedical.scheduler.data.PatientDAO;
 import com.vaadin.Application;
 import com.vaadin.ui.*;
 
@@ -15,9 +17,12 @@ public class PatientschedulerApplication extends Application {
 	private static final int LEFT_MENU_SIZE = 200;
 	private NavigationPane navPane = new NavigationPane();
 	private PatientListView patientListView = null;
-	
+	private IPatientDAO patientDAO = new PatientDAO();
 	private PatientTable patientTable = null;
 	private NewPatientForm patientForm = null;
+	
+	// Test Data
+	DataTestSets testData = new DataTestSets();
 
 	@Override
 	public void init() {
@@ -40,16 +45,16 @@ public class PatientschedulerApplication extends Application {
 		horizontalSplit.setFirstComponent(navPane);
 
 		getMainWindow().setContent(verticalLayout);
-
+		setMainComponent(getPatientListView());
 	}
 
-	private void setMainContent(Component c) {
+	private void setMainComponent(Component c) {
 		horizontalSplit.setSecondComponent(c);
 	}
 
 	private PatientListView getPatientListView() {
 		if (patientListView == null) {
-			patientTable = new PatientTable(new UnitTest().getPatients());
+			patientTable = new PatientTable();
 			patientForm = new NewPatientForm();
 			patientListView = new PatientListView(patientTable, patientForm);
 		}
