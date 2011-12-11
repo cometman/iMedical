@@ -7,13 +7,15 @@ import com.vaadin.ui.Table;
 
 public class PatientTable extends Table{
 	
-	public PatientTable(List<PatientVO> patients){
-		for (PatientVO p : patients){
-			addContainerProperty("First Name", String.class, p.getFirstName());
-			addContainerProperty("Last Name", String.class, p.getLastName());
+	public PatientTable(){
+	//	for (PatientVO p : patients){
+		//	System.out.println(p.getFirstName());
+			addContainerProperty("First Name", String.class,"Mark");
+			addContainerProperty("Last Name", String.class, "Smith");
+			addItem();
 			addItem();
 			setSizeFull();			
-		}
+		//}
 	}
 	
 

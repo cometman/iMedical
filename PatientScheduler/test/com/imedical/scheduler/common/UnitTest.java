@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.imedical.scheduler.StartServer;
 import com.imedical.scheduler.data.IPatientDAO;
 import com.imedical.scheduler.data.PatientDAO;
 import com.imedical.scheduler.data.PatientVO;
@@ -21,6 +22,17 @@ public class UnitTest {
 	PatientVO dummy4 = new PatientVO();
 	PatientVO dummy5 = new PatientVO();
 	private List<PatientVO> patients = new ArrayList<PatientVO>();
+	
+	@Test
+	public void serverDidStart(){
+		try {
+			StartServer.main(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	@Test
 	public void applicationDidCreateAndFetch5Patients() {
