@@ -7,19 +7,17 @@ import com.imedical.scheduler.common.DataTestSets;
 import com.imedical.scheduler.common.UnitTest;
 
 public class PatientDAO implements IPatientDAO {
-
+	private DataTestSets testData = null;
 	private List<PatientVO> patients = new ArrayList<PatientVO>();
-	
-	//Test Data
-	
-	
 
 	public List<PatientVO> getPatientByString(String searchQuery) {
 		return null;
 	}
 
 	public List<PatientVO> getAllPatients() {
-		DataTestSets testData = new DataTestSets();
+		if (testData == null){
+			testData = new DataTestSets();
+		}
 		patients.addAll(testData.getTestPatients());
 		return patients;
 	}

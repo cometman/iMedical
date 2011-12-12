@@ -6,40 +6,40 @@ import java.util.List;
 
 public class PatientVO {
 
-	private String first_name;
-	private String last_name;
-	private String middle_name;
+	private String firstName;
+	private String lastName;
+	private String middleName;
 	private String age;
 	private String phoneNumber;
 	private String reasonForVisit;
 	private String referral;
 	private String paymentType;
 	private boolean scheduleNewAppointment;
-	private List<Note> patientNotes = new ArrayList<Note>();
+//	private List<Note> patientNotes = new ArrayList<Note>();
 	private Date nextAppointment;
-
+	private String email;
 	public String getFirstName() {
-		return first_name;
+		return firstName;
 	}
 
 	public void setFirstName(String name) {
-		this.first_name = name;
+		this.firstName = name;
 	}
 
 	public String getLastName() {
-		return last_name;
+		return lastName;
 	}
 
 	public void setLastName(String last_name) {
-		this.last_name = last_name;
+		this.lastName = last_name;
 	}
 
 	public String getMiddleName() {
-		return middle_name;
+		return middleName;
 	}
 
 	public void setMiddleName(String middle_name) {
-		this.middle_name = middle_name;
+		this.middleName = middle_name;
 	}
 
 	public String getAge() {
@@ -90,13 +90,13 @@ public class PatientVO {
 		this.scheduleNewAppointment = scheduleNewAppointment;
 	}
 
-	public List<Note> getPatientNotes() {
-		return patientNotes;
-	}
-
-	public void setPatientNotes(List<Note> patientNotes) {
-		this.patientNotes = patientNotes;
-	}
+//	public List<Note> getPatientNotes() {
+//		return patientNotes;
+//	}
+//
+//	public void setPatientNotes(List<Note> patientNotes) {
+//		this.patientNotes = patientNotes;
+//	}
 
 	public Date getNextAppointment() {
 		return nextAppointment;
@@ -104,6 +104,14 @@ public class PatientVO {
 
 	public void setNextAppointment(Date nextAppointment) {
 		this.nextAppointment = nextAppointment;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

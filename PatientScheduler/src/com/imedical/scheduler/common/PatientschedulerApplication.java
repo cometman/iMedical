@@ -3,34 +3,41 @@ package com.imedical.scheduler.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.imedical.scheduler.calendar.MainCalendar;
 import com.imedical.scheduler.data.IPatientDAO;
 import com.imedical.scheduler.data.PatientContainer;
 import com.imedical.scheduler.data.PatientDAO;
 import com.vaadin.Application;
+import com.vaadin.addon.calendar.ui.Calendar;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window.Notification;
 
 public class PatientschedulerApplication extends Application implements
-		Button.ClickListener, Property.ValueChangeListener {
+		Button.ClickListener, Property.ValueChangeListener, ItemClickListener {
 
 	private static final long serialVersionUID = 7845062585965253129L;
 	private Logger logger = LoggerFactory
 			.getLogger(PatientschedulerApplication.class);
 	private HorizontalSplitPanel horizontalSplit = new HorizontalSplitPanel();
 	private static final int LEFT_MENU_SIZE = 200;
-	private NavigationPane navPane = new NavigationPane();
+	private NavigationPane navPane = new NavigationPane(this);
 	private PatientListView patientListView = null;
 	private PatientTable patientTable = null;
-	private NewPatientForm patientForm = null;
+	private PatientForm patientForm = null;
 	private SharingOptions sharingOptionsWindow = null;
 	private HelpWindow helpWindow = null;
-	private PatientContainer dataSource = null;
+	private PatientContainer dataSource = PatientContainer.loadInitialData();
 	private IPatientDAO patientDAO = new PatientDAO();
 	private SearchView searchView = null;
 	private Button searchPatients = new Button();
+	private MainCalendar mainCalendar = null;
+
 	private Button helpButton = new Button();
 
 	// Test Data
@@ -39,6 +46,9 @@ public class PatientschedulerApplication extends Application implements
 	@Override
 	public void init() {
 		logger.debug("Patient Scheduler started");
+		
+		// Set the theme for the application
+		setTheme("scheduler");
 
 		// Setup initial home page screen
 		Window mainWindow = new Window("Patient Scheduler");
@@ -71,6 +81,10 @@ public class PatientschedulerApplication extends Application implements
 		helpButton.addListener((Button.ClickListener) this);
 		lo.addComponent(searchPatients);
 		searchPatients.addListener((Button.ClickListener) this);
+		
+		lo.setMargin(true);			
+		lo.setSpacing(true);
+		
 		return lo;
 	}
 
@@ -82,7 +96,7 @@ public class PatientschedulerApplication extends Application implements
 		if (patientListView == null) {
 			patientTable = new PatientTable(this);
 
-			patientForm = new NewPatientForm();
+			patientForm = new PatientForm(this);
 			patientListView = new PatientListView(patientTable, patientForm);
 		}
 		return patientListView;
@@ -103,11 +117,6 @@ public class PatientschedulerApplication extends Application implements
 	}
 
 	public PatientContainer getPatientContainer() {
-		if (dataSource == null) {
-			dataSource = new PatientContainer();
-			dataSource.addAll(patientDAO.getAllPatients());
-		}
-		dataSource.addAll(patientDAO.getAllPatients());
 		return dataSource;
 	}
 
@@ -124,7 +133,7 @@ public class PatientschedulerApplication extends Application implements
 			showSearchView();
 		} else if (source == helpButton) {
 			getMainWindow().addWindow(getHelpWindow());
-		}
+		} 
 
 	}
 
@@ -133,15 +142,71 @@ public class PatientschedulerApplication extends Application implements
 
 	}
 
+	private void showPatientView() {
+		setMainComponent(getPatientListView());
+	}
+
 	public void valueChange(ValueChangeEvent event) {
 		Property property = event.getProperty();
-		if (property == patientTable){
+		if (property == patientTable) {
 			Item item = patientTable.getItem(patientTable.getValue());
-			if (item != patientForm.getItemDataSource()){
+			if (item != patientForm.getItemDataSource()) {
 				patientForm.setItemDataSource(item);
 			}
 		}
-		
+
+	}
+
+	public void itemClick(ItemClickEvent event) {
+		if (event.getSource() == navPane) {
+			Object itemId = event.getItemId();
+			if (itemId != null) {
+				if (NavigationPane.ALL_PATIENTS.equals(itemId)) {
+					getPatientContainer().removeAllContainerFilters();
+					showPatientView();
+				} else if (NavigationPane.SEARCH.equals(itemId)) {
+					showSearchView();
+				} else if (itemId instanceof SearchFilter) {
+					search((SearchFilter) itemId);
+				} else if (NavigationPane.NEW_PATIENT.equals(itemId)) {
+					addNewPatient();
+				} else if (NavigationPane.WEEK_VIEW.equals(itemId)){
+					showCalendarWeek();
+				}
+			}
+		}
+	}
+
+	private void showCalendarWeek() {
+		setMainComponent(getCalendarWeek());		
+	}
+	private MainCalendar getCalendarWeek() {
+		if (mainCalendar == null){
+			mainCalendar = new MainCalendar(this);
+		}
+		return mainCalendar;
+	}
+
+	private void addNewPatient() {
+		showPatientView();
+		patientForm.addPatient();
+	}
+
+	public void search(SearchFilter searchFilter) {
+		getPatientContainer().removeAllContainerFilters();
+		getPatientContainer().addContainerFilter(searchFilter.getPropertyId(),
+				searchFilter.getTerm(), true, false);
+		showPatientView();
+		getMainWindow().showNotification("Searched for *" + searchFilter.getTerm() + "* found " + getPatientContainer().size()+" results.",
+				Notification.TYPE_TRAY_NOTIFICATION);
+	}
+
+	public void saveSearch(SearchFilter searchFilter) {
+		navPane.addItem(searchFilter);
+		navPane.setParent(searchFilter, NavigationPane.SEARCH);
+		navPane.setChildrenAllowed(searchFilter, false);
+		navPane.expandItem(NavigationPane.SEARCH);
+		navPane.setValue(searchFilter);
 	}
 
 }
