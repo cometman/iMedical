@@ -16,7 +16,7 @@ public class PatientDAO implements IPatientDAO {
 
 	public List<PatientVO> getAllPatients() {
 		if (testData == null){
-			testData = new DataTestSets();
+			testData = DataTestSets.getInstance();
 		}
 		patients.addAll(testData.getTestPatients());
 		return patients;

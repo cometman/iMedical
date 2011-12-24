@@ -25,21 +25,19 @@ public class PatientTable extends Table {
 				return l;
 			}
 		});
-
+		
 		setContainerDataSource(app.getPatientContainer());
 		// for (PatientVO p : patients){
 		// System.out.println(p.getFirstName());
 		setSizeFull();
-		System.out.println(app.getPatientContainer().getItemIds().size());
-
 		setSelectable(true);
 		setImmediate(true);
 		addListener((Property.ValueChangeListener) app);
 		setNullSelectionAllowed(false);
 		setVisibleColumns(PatientContainer.NATUAL_COL_ORDER);
-		setColumnHeaders(PatientContainer.COL_HEADERS_ENGLISH);
-
+		setColumnHeaders(PatientContainer.COL_HEADERS_ENGLISH);	
+		
 		// }
 	}
-
+	
 }

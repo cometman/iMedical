@@ -14,7 +14,6 @@ public class PatientVO {
 	private String reasonForVisit;
 	private String referral;
 	private String paymentType;
-	private boolean scheduleNewAppointment;
 //	private List<Note> patientNotes = new ArrayList<Note>();
 	private Date nextAppointment;
 	private String email;
@@ -80,14 +79,6 @@ public class PatientVO {
 
 	public void setPaymentType(String paymentType) {
 		this.paymentType = paymentType;
-	}
-
-	public boolean isScheduleNewAppointment() {
-		return scheduleNewAppointment;
-	}
-
-	public void setScheduleNewAppointment(boolean scheduleNewAppointment) {
-		this.scheduleNewAppointment = scheduleNewAppointment;
 	}
 
 //	public List<Note> getPatientNotes() {
